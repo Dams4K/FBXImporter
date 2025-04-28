@@ -1,0 +1,39 @@
+[gd_scene load_steps=5 format=3 uid="uid://cg61dpeo26qxi"]
+
+[ext_resource type="Script" uid="uid://ktt8pn5d4rnh" path="res://addons/fbximporter/preview_scene.gd" id="1_eph1x"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jyjx6"]
+sky_top_color = Color(1, 1, 1, 1)
+sky_horizon_color = Color(0.5, 0.5, 0.5, 1)
+sky_curve = 2.0
+ground_bottom_color = Color(0, 0, 0, 1)
+ground_horizon_color = Color(0.501961, 0.501961, 0.501961, 1)
+ground_curve = 0.5
+sun_angle_max = 0.0
+
+[sub_resource type="Sky" id="Sky_eph1x"]
+sky_material = SubResource("ProceduralSkyMaterial_jyjx6")
+
+[sub_resource type="Environment" id="Environment_ikq0c"]
+background_mode = 2
+sky = SubResource("Sky_eph1x")
+sky_custom_fov = 50.0
+tonemap_mode = 2
+glow_enabled = true
+
+[node name="PreviewScene" type="Node3D"]
+script = ExtResource("1_eph1x")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_ikq0c")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+current = true
+
+[node name="Light1" type="DirectionalLight3D" parent="Camera3D"]
+transform = Transform3D(0.707107, -0.408248, 0.57735, 0, 0.816497, 0.57735, -0.707107, -0.408248, 0.57735, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Light2" type="DirectionalLight3D" parent="Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 0, -1, 0, 1, 0, 0, 0, 0)
+light_color = Color(0.5, 0.5, 0.5, 1)

@@ -1,0 +1,83 @@
+[gd_scene load_steps=5 format=3 uid="uid://bxrnv8u2c742s"]
+
+[ext_resource type="Script" uid="uid://dxcwa3bnwlnvf" path="res://addons/fbximporter/fbx_importer_menu.gd" id="1_4bybg"]
+[ext_resource type="PackedScene" uid="uid://cg61dpeo26qxi" path="res://addons/fbximporter/preview_scene.tscn" id="1_ijwcn"]
+[ext_resource type="Script" uid="uid://gkge8l15c35f" path="res://addons/fbximporter/inspector_container.gd" id="3_y4fl4"]
+
+[sub_resource type="GDScript" id="GDScript_y4fl4"]
+script/source = "@tool
+extends SubViewportContainer
+
+@onready var preview_viewport: SubViewport = %PreviewViewport
+
+func _gui_input(event: InputEvent) -> void:
+	preview_viewport.push_input(event)
+"
+
+[node name="FbxImporterMenu" type="ConfirmationDialog"]
+title = "FBX Importer Menu"
+position = Vector2i(0, 36)
+size = Vector2i(1152, 648)
+popup_window = true
+ok_button_text = "Create Scene"
+script = ExtResource("1_4bybg")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 8.0
+offset_right = -8.0
+offset_bottom = -49.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HSplitContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 3.5
+mouse_filter = 0
+stretch = true
+script = SubResource("GDScript_y4fl4")
+
+[node name="PreviewViewport" type="SubViewport" parent="Control/HBoxContainer/SubViewportContainer"]
+unique_name_in_owner = true
+own_world_3d = true
+handle_input_locally = false
+size = Vector2i(877, 591)
+render_target_update_mode = 0
+
+[node name="PreviewScene" parent="Control/HBoxContainer/SubViewportContainer/PreviewViewport" instance=ExtResource("1_ijwcn")]
+unique_name_in_owner = true
+
+[node name="TabContainer" type="TabContainer" parent="Control/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+current_tab = 1
+
+[node name="CurrentFileInspector" type="Control" parent="Control/HBoxContainer/TabContainer"]
+visible = false
+layout_mode = 2
+script = ExtResource("3_y4fl4")
+metadata/_custom_type_script = "uid://gkge8l15c35f"
+metadata/_tab_index = 0
+
+[node name="ImportSettingsInspector" type="Control" parent="Control/HBoxContainer/TabContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("3_y4fl4")
+object_path = "uid://br8dwbcb2xilm"
+metadata/_custom_type_script = "uid://gkge8l15c35f"
+metadata/_tab_index = 1
+
+[connection signal="confirmed" from="." to="." method="_on_confirmed"]
